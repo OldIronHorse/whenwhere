@@ -1,0 +1,27 @@
+Relations
+=========
+
+Course
+  - 1+ class
+  - 0+ student
+
+Day
+  - 7 periods
+
+Constraints
+===========
+
+A student can only be in one place at a time
+
+Approach
+========
+
+Start with simple case:
+  3 Courses:  A B C
+  2 students 
+  1 course they both attend: B
+  generate options
+  expect:
+    A+C, B
+    B, A+C
+  
