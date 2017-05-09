@@ -12,6 +12,7 @@ Constraints
 ===========
 
 A student can only be in one place at a time
+Lectures must be delivered in the right order
 
 Approach
 ========
@@ -25,3 +26,6 @@ Start with simple case:
     A+C, B
     B, A+C
   
+
+E1  E2  E3  E4
+F1  F2  F3

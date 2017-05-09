@@ -41,5 +41,21 @@ class Course:
 
 
 def attendable(courses):
-  class_sequences=[]
-  return [set(ls) for ls in zip_longest(*[c.lectures for c in courses])]
+  lectures=[]
+  for c in courses:
+    lectures+=c.lectures
+  sequence=[]
+  for l in lectures:
+    for period in sequence:
+      if distinct_students(period, l):
+        period.add(l)
+    else:
+      sequence.append({l})
+  return sequence
+
+def distinct_students(period,lecture):
+  period_students=set()
+  for l in period:
+    period_students=period_students.union(l.course.students)
+  return not (period_students & lecture.course.students)
+  pass
