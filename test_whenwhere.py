@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from unittest import main, TestCase
+from unittest import main,TestCase
 
-from whenwhere import attendable,Course,distinct_students,Lecture
+from whenwhere import Course,course_groups,distinct_students,Lecture
 
 class TestLecture(TestCase):
   def test_equal_true(self):
@@ -15,45 +15,50 @@ class TestLecture(TestCase):
     self.assertFalse(Lecture('a',1)==Lecture('a',2))
 
 
-class TestAttendable(TestCase):
+class TestCourseGroups(TestCase):
   def test_empty(self):
-    self.assertEqual([],attendable([]))
+    self.assertEqual([],course_groups([]))
 
   def test_single_course(self):
     self.maxDiff=None
     c=Course('English 101',3,set())
-    self.assertEqual([{Lecture(c,1)},{Lecture(c,2)},{Lecture(c,3)}],
-                     list(attendable([c])))
+    self.assertEqual([{c}],list(course_groups([c])))
 
   def test_two_courses_no_conflict(self):
     self.maxDiff=None
     c1=Course('English',3,set())
     c2=Course('French',4,set())
-    self.assertEqual([{Lecture(c1,1),Lecture(c2,1)},
-                      {Lecture(c1,2),Lecture(c2,2)},
-                      {Lecture(c1,3),Lecture(c2,3)},
-                      {Lecture(c2,4)}],
-                     list(attendable([c1,c2])))
+    self.assertEqual([{c1,c2}],course_groups([c1,c2]))
 
   def test_tow_courses_conflict(self):
     self.maxDiff=None
     c1=Course('English',3,{1,2})
     c2=Course('French',4,{2,3})
-    self.assertEqual([{Lecture(c1,1)},
-                      {Lecture(c1,2)},
-                      {Lecture(c1,3)},
-                      {Lecture(c2,1)},
-                      {Lecture(c2,2)},
-                      {Lecture(c2,3)},
-                      {Lecture(c2,4)}],
-                     list(attendable([c1,c2])))
+    self.assertEqual([{(c1)},{c2}],course_groups([c1,c2]))
+
+#TODO test for multiple courses, some conflicting
 
 
 
 class TestDistinctStudents(TestCase):
   def test_single_lecture_distinct(self):
-    self.assertTrue(distinct_students({Lecture(Course('English',3,{1,2}),10)},
-                                      Lecture(Course('French',4,{5,6}),20)))
+    self.assertTrue(distinct_students([Course('English',3,{1,2})],
+                                      Course('French',4,{5,6})))
+
+  def test_single_lecture_not_distinct(self):
+    self.assertFalse(distinct_students([Course('English',3,{1,2})],
+                                       Course('French',4,{2,6})))
+
+  def test_lectures_distinct(self):
+    self.assertTrue(distinct_students([Course('English',3,{1,2}),
+                                       Course('Maths',3,{3,4})],
+                                      Course('French',4,{5,6})))
+
+  def test_lectures_not_distinct(self):
+    self.assertFalse(distinct_students([Course('English',3,{1,2}),
+                                        Course('Maths',3,{3,4})],
+                                       Course('French',4,{3,6})))
+
 
 if __name__=='__main__':
   main()

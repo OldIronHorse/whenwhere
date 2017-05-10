@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from itertools import zip_longest
-
 class Lecture:
   def __init__(self,course,index):
     self.course=course
@@ -40,22 +38,19 @@ class Course:
       self.name,len(self.lectures),self.students)
 
 
-def attendable(courses):
-  lectures=[]
+def course_groups(courses):
+  course_groups=[]
   for c in courses:
-    lectures+=c.lectures
-  sequence=[]
-  for l in lectures:
-    for period in sequence:
-      if distinct_students(period, l):
-        period.add(l)
+    for group in course_groups:
+      if distinct_students(group, c):
+        group.add(c)
+        break
     else:
-      sequence.append({l})
-  return sequence
+      course_groups.append({c})
+  return course_groups
 
-def distinct_students(period,lecture):
-  period_students=set()
-  for l in period:
-    period_students=period_students.union(l.course.students)
-  return not (period_students & lecture.course.students)
-  pass
+def distinct_students(courses,course):
+  group_students=set()
+  for c in courses:
+    group_students=group_students.union(c.students)
+  return not (group_students & course.students)
