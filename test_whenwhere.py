@@ -30,13 +30,19 @@ class TestCourseGroups(TestCase):
     c2=Course('French',4,set())
     self.assertEqual([{c1,c2}],course_groups([c1,c2]))
 
-  def test_tow_courses_conflict(self):
+  def test_two_courses_conflict(self):
     self.maxDiff=None
     c1=Course('English',3,{1,2})
     c2=Course('French',4,{2,3})
-    self.assertEqual([{(c1)},{c2}],course_groups([c1,c2]))
+    self.assertEqual([{c1},{c2}],course_groups([c1,c2]))
 
-#TODO test for multiple courses, some conflicting
+  def test_multiple_courses_some_conflict(self):
+    self.maxDiff=None
+    c1=Course('C1',3,{1,2})
+    c2=Course('C2',4,{2,3})
+    c3=Course('C3',3,{3,4})
+    c4=Course('C4',4,{7,8})
+    self.assertEqual([{c1,c3,c4},{c2}],course_groups([c1,c2,c3,c4]))
 
 
 
